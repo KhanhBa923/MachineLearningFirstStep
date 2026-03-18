@@ -1,0 +1,58 @@
+REACT:
+// useMemo -> ghi nhớ GIÁ TRỊ (ket qua cua phep tinh)
+// useCallback -> ghi nhớ HÀM (tham chieu cua function)
+// React.memo -> ghi nhớ COMPONENT (chi render lai khi props thay doi)
+- useMemo(() => giá_trị, [deps]) // return biến 
+- useCallback(() => { ... }, [deps]) //return hàm
+- export default React.memo(Memo): Khi props truyền vào component thay đổi
+// useRef -> lưu giá trị nhưng k trigger render
+// useContext -> cho tất cả component con dùng biến và hàm của cha k cần qua trung gian
+// forwardRef ->truy cập vào thẻ HTML (DOM) bên trong con ,cho phép cha gọi và sử dụng hàm bên trong con, nên dùng cùng useImperativeHandle để bảo mật
+// useImperativeHandle -> giới hạn những hàm mà cha có thể truy cập từ của con thông qua ref
+// useLayoutEffect -> giống useEffect, khác chạy TRƯỚC khi trình duyệt vẽ giao diện, còn useEffect là chạy SAU
+// useReducer -> tương tác với 1 biến nhưng phức tạp hơn do nhiều trường hợp
+
+- feature: input data cho ai
+- label: output data do ai tạo ra
+- supervised learning: cho feature, và label vào cho ai,label làm kết quả để kiểm quả, nếu ai tạo ra rule(model) đúng với label thì pass
+- unsupervised learning: cho feature, k có label, ai sẽ dựa vào input để tạo ra model (group các input vào từng nhóm khác nhau)
+- reinforcement learning: k có input , có mục tiêu , agent có nhiệm vụ đạt đc mục tiêu, nếu agent càng đến gần goal thì sẽ có điểm thưởng và ngược lại
+- tensor: vector có n chiều (x,y,z, ... ,n) tùy vào user
+- linear algorithm: dự đoán y dựa theo input = sơ đồ x ẩn (y=ax+b), dùng để tìm a và b sao cho kết quả sẽ gầm đúng nhất với ma trận input, 
+//có data set bao gồm x và kết quả y, sau đó tìm a và b, dựa vào a và b thì có model, lần sau chỉ cần x thì có thế tính ra y  
+- epoch: số lần máy đọc input, vd epoch = 300 thì máy đã đọc 300 lần, càng lớn thì output cần gần đáp án
+- classification: tạo model dùng để phân loại cho các input, 
+// cho 1 dataset và các nhóm phân loại, máy sẽ dùng data để tạo model dựa trên input, đã có model thì các input về sau sẽ đc phân loại
+//Regression dự đoán một con số (giá nhà, nhiệt độ)
+//Classification dự đoán một nhãn/danh mục (Chó hay Mèo, Email rác hay không).
+- clustering: tự cho các input vào các nhóm do máy tạo, user có thể set số nhóm nhưng k set đc đặc điểm nhóm
+// K-Means Clustering: cho dataset là các 1 điểm trên đồ thị, tạo các nhóm là 1 điểm bất kỳ trên đồ thị, kiểm tra từ điểm input đến điểm nhóm, khoảng cách nào ngắn nhất thì input sẽ thuộc nhóm đó
+- hidden Markiv models: dựa vào những thứ quan sát đc để đoán thứ ẩn đi (A đi chơi -> chỗ A khả năng cao k mưa)
+// mean: thường thì sẽ vào giá trị này 
+// min/max: giá trị thấp nhất và cao nhất
+// standard devation: khoảng cách giá trị (mean = 5 và standard devation = 10 -> (-5,15))
+- weight, bias: các giá trị sẽ đc máy điều chỉnh để phù hợp với data input
+- activation function:đứng ở đầu ra mỗi nơ rơn để kiểm tra kết quả sau khi máy tính ra có đạt yêu cầu hay k, nếu đạt sẽ đc truyền tiếp qua các layer tiếp theo
+- loss function: dựa vào kết quả máy tính ra để so sánh với output mẫu, nếu càng khác nhau thì loss càng lớn (loss lớn thì fail)
+- Backpropagation: dựa vào loss để kiểm tra w và b các layer trc đóng góp bnh r điều chỉnh
+- hidden layer: tầng để máy học (nhiều tầng -> phức tạp)
+- Kiến trúc mạng: 4 → 16 → 8 → 3: input layer có 4 features,
+sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để có thêm thông tin, sau đó cô đọng lại (8 - hidden layer 2) và cuối là output layer (3 giá trị - classification)
+- Learning rate: tốc độ học (quá lớn → k ổn định, quá nhỏ → chậm)
+- Overfitting: khi cho máy input giống nhau quá nhiều lần, máy sẽ điều chỉnh w và b để phù hợp với input chứ k với test
+(bad)
+- Convolutional neural network: đọc qua toàn bộ ảnh, tìm kiếm features r từ features đó sẽ truyền qua cho neural network
+- Convolution: vị trí của các giá trị trg input so với mẫu
+// giá cp 30 ngày, feature 1 = ngày 1->5, thấy giá đang tăng, set feature 1 = tăng, feature 2 = ngày 2->6, giá giảm -> giảm
+- Pooling: giảm kích thước dữ liệu, chia features thành nhóm r lấy MAX(cx có thể lấy MIN tùy vào cách lấy) nhưng vx giữ  lại đặc trưng, để tránh overfitting
+- Flattening:chuyển dữ liệu thành vector 1 chiều để nơ ron có thể đọc
+- Fully Connected Layer: quay về kiến trúc mạng (vd 4 → 16 → 8 → 3) 
+// flow: input -> convolution layer -> activation function -> pooling layer -> flattening -> Fully Connected Layer - output
+// ( conv -> activation -> pooling) thường lặp lại nhiều lần trước khi đến flattening
+------------------------------------------------------
+Naive bayes:
+	P(A|B) = (P(B|A) / P(A)) / P(B)
+
+P(A|B): Xác suất $A$ xảy ra khi biết $B$ đã xảy ra (Xác suất hậu nghiệm).
+P(B|A): Xác suất $B$ xảy ra khi biết $A$ đã xảy ra.
+P(A), P(B): Xác suất riêng biệt của $A$ và $B$.
