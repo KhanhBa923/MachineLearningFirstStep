@@ -12,6 +12,8 @@ Tập hợp các ví dụ minh họa về Machine Learning và AI, xây dựng t
 | `neural_network_example.py` | Neural Network | Mạng nơ-ron từ đầu (phân loại hoa, bệnh tiểu đường, chữ số viết tay) |
 | `cnn_stock_example.py` | CNN | Mạng tích chập 1D cho chứng khoán (xu hướng giá, mẫu nến, biến động) |
 | `hidden_markov_model_example.py` | HMM | Mô hình Markov ẩn (thời tiết, POS tagging, sức khỏe) |
+| `rnn_example.py` | RNN | Mạng hồi quy: Vanilla RNN, LSTM, GRU (nhiệt độ, sinh tên, cảm xúc) |
+| `sentiment_analysis_example.py` | Sentiment Analysis | Phân tích cảm xúc review (Rule-Based, Naive Bayes, TF-IDF + NN) |
 | `model_save_load_improve.py` | Model Save/Load | Lưu, tải và cải tiến model (Dropout, L2, Early Stopping) |
 | `tensor.py` | Tensor | Các phép toán tensor cơ bản |
 
