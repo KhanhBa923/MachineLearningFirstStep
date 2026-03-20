@@ -34,6 +34,7 @@ Ví dụ trong file này:
 """
 
 import numpy as np
+from services import ActivationService, LossService
 
 
 # =============================================================================
@@ -173,8 +174,7 @@ class LSTMCell:
 
     @staticmethod
     def _sigmoid(x):
-        x = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x))
+        return ActivationService.sigmoid(x)
 
 
 # =============================================================================
@@ -251,8 +251,7 @@ class GRUCell:
 
     @staticmethod
     def _sigmoid(x):
-        x = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x))
+        return ActivationService.sigmoid(x)
 
 
 # =============================================================================

@@ -24,6 +24,7 @@ Ví dụ trong file này:
 """
 
 import numpy as np
+from services import ActivationService, LossService, DataService
 
 
 # =============================================================================
@@ -230,22 +231,21 @@ class Dense:
 
 
 class ReLU:
-    """ReLU activation: giữ giá trị dương, đặt âm = 0."""
+    """ReLU activation: giữ giá trị dương, đặt âm = 0. (Dùng ActivationService)"""
 
     def forward(self, X):
         self.input = X
-        return np.maximum(0, X)
+        return ActivationService.relu(X)
 
     def backward(self, d_output, learning_rate=None):
-        return d_output * (self.input > 0).astype(float)
+        return d_output * ActivationService.relu_derivative(self.input)
 
 
 class Sigmoid:
-    """Sigmoid activation: nén về (0, 1) cho phân loại nhị phân."""
+    """Sigmoid activation: nén về (0, 1) cho phân loại nhị phân. (Dùng ActivationService)"""
 
     def forward(self, X):
-        X = np.clip(X, -500, 500)
-        self.output = 1 / (1 + np.exp(-X))
+        self.output = ActivationService.sigmoid(X)
         return self.output
 
     def backward(self, d_output, learning_rate=None):
@@ -253,7 +253,7 @@ class Sigmoid:
 
 
 class Softmax:
-    """Softmax activation: chuyển thành phân phối xác suất cho nhiều lớp."""
+    """Softmax activation: chuyển thành phân phối xác suất cho nhiều lớp. (Dùng ActivationService)"""
 
     def forward(self, X):
         exp_x = np.exp(X - np.max(X, axis=1, keepdims=True))
@@ -261,7 +261,6 @@ class Softmax:
         return self.output
 
     def backward(self, d_output, learning_rate=None):
-        # Khi dùng với cross-entropy, gradient đã được tính gộp
         return d_output
 
 
@@ -361,12 +360,9 @@ class StockCNN:
                 # Loss
                 y_pred_clip = np.clip(y_pred, 1e-8, 1 - 1e-8)
                 if self.task == 'binary':
-                    loss = -np.mean(
-                        y_batch * np.log(y_pred_clip) +
-                        (1 - y_batch) * np.log(1 - y_pred_clip)
-                    )
+                    loss = LossService.binary_cross_entropy(y_batch, y_pred_clip)
                 else:
-                    loss = -np.mean(np.sum(y_batch * np.log(y_pred_clip), axis=1))
+                    loss = LossService.categorical_cross_entropy(y_batch, y_pred_clip)
 
                 epoch_loss += loss * (end - start)
 
@@ -595,22 +591,8 @@ def tao_dataset_mau_nen(n_samples=600):
     return np.array(X_list), np.array(y_list)
 
 
-def train_test_split(X, y, test_ratio=0.2, seed=42):
-    """Chia dữ liệu train/test."""
-    np.random.seed(seed)
-    n = len(X)
-    indices = np.random.permutation(n)
-    test_size = int(n * test_ratio)
-    return (X[indices[test_size:]], X[indices[:test_size]],
-            y[indices[test_size:]], y[indices[:test_size]])
-
-
-def one_hot(y, n_classes):
-    """One-hot encoding."""
-    encoded = np.zeros((len(y), n_classes))
-    for i, label in enumerate(y):
-        encoded[i, int(label)] = 1
-    return encoded
+train_test_split = DataService.train_test_split
+one_hot = DataService.one_hot_encode
 
 
 # =============================================================================

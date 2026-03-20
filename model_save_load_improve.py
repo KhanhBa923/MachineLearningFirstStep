@@ -19,6 +19,7 @@ Ví dụ: Dự đoán nhân viên có nghỉ việc hay không
 import numpy as np
 import json
 import os
+from services import ActivationService, LossService, DataService
 
 # Đường dẫn thư mục hiện tại để lưu model
 MODEL_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -53,19 +54,12 @@ class SimpleNN:
 
         self.loss_history = []
 
-    def relu(self, x):
-        return np.maximum(0, x)
-
-    def sigmoid(self, x):
-        x = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x))
-
     def forward(self, X):
         """Forward pass: Input → Hidden (ReLU) → Output (Sigmoid)"""
         self.z1 = X @ self.W1 + self.b1
-        self.a1 = self.relu(self.z1)
+        self.a1 = ActivationService.relu(self.z1)
         self.z2 = self.a1 @ self.W2 + self.b2
-        self.a2 = self.sigmoid(self.z2)
+        self.a2 = ActivationService.sigmoid(self.z2)
         return self.a2
 
     def backward(self, X, y, output):
@@ -94,8 +88,7 @@ class SimpleNN:
             output = self.forward(X)
 
             # Binary cross-entropy loss
-            output_clip = np.clip(output, 1e-8, 1 - 1e-8)
-            loss = -np.mean(y * np.log(output_clip) + (1 - y) * np.log(1 - output_clip))
+            loss = LossService.binary_cross_entropy(y, output)
             self.loss_history.append(loss)
 
             self.backward(X, y, output)
@@ -263,13 +256,6 @@ class ImprovedNN:
             "lr_decay": lr_decay,
         }
 
-    def relu(self, x):
-        return np.maximum(0, x)
-
-    def sigmoid(self, x):
-        x = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x))
-
     def batch_norm(self, x, layer_idx):
         """
         Batch Normalization: chuẩn hóa output của mỗi layer.
@@ -324,11 +310,11 @@ class ImprovedNN:
 
             if i == self.n_layers - 1:
                 # Tầng cuối: sigmoid (không BN, không dropout)
-                a = self.sigmoid(z)
+                a = ActivationService.sigmoid(z)
             else:
                 # Tầng ẩn: BN → ReLU → Dropout
                 z_bn = self.batch_norm(z, i)
-                a = self.relu(z_bn)
+                a = ActivationService.relu(z_bn)
                 a = self.dropout(a)
 
             self.a_values.append(a)
@@ -398,8 +384,7 @@ class ImprovedNN:
 
                 output = self.forward(X_batch)
 
-                out_clip = np.clip(output, 1e-8, 1 - 1e-8)
-                loss = -np.mean(y_batch * np.log(out_clip) + (1 - y_batch) * np.log(1 - out_clip))
+                loss = LossService.binary_cross_entropy(y_batch, output)
 
                 # Thêm L2 loss
                 l2_loss = 0
@@ -418,8 +403,7 @@ class ImprovedNN:
             if X_val is not None:
                 self.training = False  # Tắt dropout khi đánh giá
                 val_pred = self.forward(X_val)
-                val_clip = np.clip(val_pred, 1e-8, 1 - 1e-8)
-                val_loss = -np.mean(y_val * np.log(val_clip) + (1 - y_val) * np.log(1 - val_clip))
+                val_loss = LossService.binary_cross_entropy(y_val, val_pred)
                 self.training = True
 
                 if val_loss < best_val_loss:
@@ -562,30 +546,8 @@ def tao_du_lieu_nhan_vien(n_samples=500, seed=42):
     return X, y
 
 
-def normalize(X):
-    """Chuẩn hóa dữ liệu."""
-    mean = np.mean(X, axis=0)
-    std = np.std(X, axis=0)
-    std[std == 0] = 1
-    return (X - mean) / std, mean, std
-
-
-def split_data(X, y, val_ratio=0.15, test_ratio=0.15, seed=42):
-    """Chia thành 3 tập: train / validation / test."""
-    np.random.seed(seed)
-    n = len(X)
-    idx = np.random.permutation(n)
-
-    n_test = int(n * test_ratio)
-    n_val = int(n * val_ratio)
-
-    test_idx = idx[:n_test]
-    val_idx = idx[n_test:n_test + n_val]
-    train_idx = idx[n_test + n_val:]
-
-    return (X[train_idx], y[train_idx],
-            X[val_idx], y[val_idx],
-            X[test_idx], y[test_idx])
+normalize = DataService.normalize
+split_data = DataService.train_val_test_split
 
 
 # =============================================================================

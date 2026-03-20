@@ -22,6 +22,7 @@ Các phương pháp trong file này:
 import numpy as np
 import re
 from collections import Counter
+from services import ActivationService, LossService
 
 
 # =============================================================================
@@ -413,15 +414,11 @@ class SentimentNN:
         self.W2 = np.random.randn(n_hidden, n_output) * np.sqrt(2.0 / n_hidden)
         self.b2 = np.zeros((1, n_output))
 
-    def softmax(self, x):
-        exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
-        return exp_x / np.sum(exp_x, axis=1, keepdims=True)
-
     def forward(self, X):
         self.z1 = X @ self.W1 + self.b1
-        self.a1 = np.maximum(0, self.z1)  # ReLU
+        self.a1 = ActivationService.relu(self.z1)
         self.z2 = self.a1 @ self.W2 + self.b2
-        self.a2 = self.softmax(self.z2)
+        self.a2 = ActivationService.softmax(self.z2)
         return self.a2
 
     def train(self, X, y_onehot, epochs=100, verbose=True):
@@ -430,8 +427,7 @@ class SentimentNN:
             output = self.forward(X)
 
             # Loss
-            output_clip = np.clip(output, 1e-8, 1 - 1e-8)
-            loss = -np.mean(np.sum(y_onehot * np.log(output_clip), axis=1))
+            loss = LossService.categorical_cross_entropy(y_onehot, output)
 
             # Backward
             m = X.shape[0]

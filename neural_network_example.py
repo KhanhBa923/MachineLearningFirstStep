@@ -21,82 +21,7 @@ Ví dụ thực tế trong file này:
 """
 
 import numpy as np
-
-
-# =============================================================================
-# PHẦN 1: CÁC HÀM KÍCH HOẠT (ACTIVATION FUNCTIONS)
-# =============================================================================
-# Hàm kích hoạt quyết định nơ-ron có "kích hoạt" (truyền tín hiệu) hay không.
-# Không có hàm kích hoạt → mạng chỉ là phép tuyến tính, không học được gì phức tạp.
-
-class Activation:
-    """Tập hợp các hàm kích hoạt phổ biến."""
-
-    @staticmethod
-    def sigmoid(x):
-        """
-        Sigmoid: nén giá trị về khoảng (0, 1)
-        Giống như "mức độ tự tin": 0 = không chắc, 1 = rất chắc
-        Dùng cho: bài toán phân loại nhị phân (có/không, bệnh/khỏe)
-        """
-        # Clip để tránh overflow khi x quá lớn/nhỏ
-        x = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x))
-
-    @staticmethod
-    def sigmoid_derivative(x):
-        """Đạo hàm sigmoid: dùng trong backpropagation."""
-        s = Activation.sigmoid(x)
-        return s * (1 - s)
-
-    @staticmethod
-    def relu(x):
-        """
-        ReLU (Rectified Linear Unit): giữ nguyên nếu dương, = 0 nếu âm
-        Đơn giản nhưng hiệu quả, phổ biến nhất trong deep learning
-        Giống như: "chỉ truyền tín hiệu khi có tín hiệu tích cực"
-        """
-        return np.maximum(0, x)
-
-    @staticmethod
-    def relu_derivative(x):
-        """Đạo hàm ReLU: 1 nếu x > 0, 0 nếu x <= 0."""
-        return (x > 0).astype(float)
-
-    @staticmethod
-    def softmax(x):
-        """
-        Softmax: chuyển vector thành phân phối xác suất (tổng = 1)
-        Dùng cho: phân loại nhiều lớp (loại A: 70%, loại B: 20%, loại C: 10%)
-        """
-        # Trừ max để tránh overflow (trick ổn định số học)
-        exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
-        return exp_x / np.sum(exp_x, axis=1, keepdims=True)
-
-
-# =============================================================================
-# PHẦN 2: CÁC HÀM MẤT MÁT (LOSS FUNCTIONS)
-# =============================================================================
-# Loss function đo "mô hình sai bao nhiêu". Mục tiêu: giảm loss xuống thấp nhất.
-
-class Loss:
-    @staticmethod
-    def binary_cross_entropy(y_true, y_pred):
-        """
-        Binary Cross-Entropy: dùng cho phân loại 2 lớp
-        Phạt nặng khi mô hình "tự tin sai" (dự đoán 0.99 nhưng thực tế là 0)
-        """
-        y_pred = np.clip(y_pred, 1e-8, 1 - 1e-8)  # Tránh log(0)
-        return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
-
-    @staticmethod
-    def categorical_cross_entropy(y_true, y_pred):
-        """
-        Categorical Cross-Entropy: dùng cho phân loại nhiều lớp
-        y_true: one-hot encoded (vd: [0, 1, 0] = lớp thứ 2)
-        """
-        y_pred = np.clip(y_pred, 1e-8, 1 - 1e-8)
-        return -np.mean(np.sum(y_true * np.log(y_pred), axis=1))
+from services import ActivationService as Activation, LossService as Loss, DataService
 
 
 # =============================================================================
@@ -307,43 +232,12 @@ class NeuralNetwork:
 
 
 # =============================================================================
-# HÀM TIỆN ÍCH
+# HÀM TIỆN ÍCH (sử dụng từ DataService)
 # =============================================================================
 
-def normalize(X):
-    """
-    Chuẩn hóa dữ liệu về mean=0, std=1 (Z-score normalization).
-    Rất quan trọng cho Neural Network vì:
-      - Giúp gradient descent hội tụ nhanh hơn
-      - Tránh features có giá trị lớn "lấn át" features nhỏ
-    """
-    mean = np.mean(X, axis=0)
-    std = np.std(X, axis=0)
-    std[std == 0] = 1  # Tránh chia cho 0
-    return (X - mean) / std, mean, std
-
-
-def one_hot_encode(y, n_classes):
-    """
-    One-hot encoding: chuyển nhãn số thành vector nhị phân.
-    Ví dụ: nhãn 2 với 3 lớp → [0, 0, 1]
-    Neural network cần dạng này để tính loss với softmax.
-    """
-    encoded = np.zeros((len(y), n_classes))
-    for i, label in enumerate(y):
-        encoded[i, label] = 1
-    return encoded
-
-
-def train_test_split(X, y, test_ratio=0.2, seed=42):
-    """Chia dữ liệu thành tập train và test."""
-    np.random.seed(seed)
-    n = len(X)
-    indices = np.random.permutation(n)
-    test_size = int(n * test_ratio)
-    test_idx = indices[:test_size]
-    train_idx = indices[test_size:]
-    return X[train_idx], X[test_idx], y[train_idx], y[test_idx]
+normalize = DataService.normalize
+one_hot_encode = DataService.one_hot_encode
+train_test_split = DataService.train_test_split
 
 
 # =============================================================================
