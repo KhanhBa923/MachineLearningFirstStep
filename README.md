@@ -15,6 +15,7 @@ Tập hợp các ví dụ minh họa về Machine Learning và AI, xây dựng t
 | `rnn_example.py` | RNN | Mạng hồi quy: Vanilla RNN, LSTM, GRU (nhiệt độ, sinh tên, cảm xúc) |
 | `sentiment_analysis_example.py` | Sentiment Analysis | Phân tích cảm xúc review (Rule-Based, Naive Bayes, TF-IDF + NN) |
 | `model_save_load_improve.py` | Model Save/Load | Lưu, tải và cải tiến model (Dropout, L2, Early Stopping) |
+| `q_learning_example.py` | Q-Learning | Học tăng cường: mê cung, taxi, frozen lake, exploration vs exploitation |
 | `tensor.py` | Tensor | Các phép toán tensor cơ bản |
 | `services.py` | Services | Các class tiện ích dùng chung (Activation, Loss, Data) |
 
@@ -42,4 +43,5 @@ python hidden_markov_model_example.py
 python rnn_example.py
 python sentiment_analysis_example.py
 python model_save_load_improve.py
+python q_learning_example.py
 ```

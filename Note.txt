@@ -18,7 +18,7 @@ REACT:
 - unsupervised learning: cho feature, k có label, ai sẽ dựa vào input để tạo ra model (group các input vào từng nhóm khác nhau)
 - reinforcement learning: k có input , có mục tiêu , agent có nhiệm vụ đạt đc mục tiêu, nếu agent càng đến gần goal thì sẽ có điểm thưởng và ngược lại
 - tensor: vector có n chiều (x,y,z, ... ,n) tùy vào user
-- linear algorithm: dự đoán y dựa theo input = sơ đồ x ẩn (y=ax+b), dùng để tìm a và b sao cho kết quả sẽ gầm đúng nhất với ma trận input, 
+- Regression linear algorithm: dự đoán y dựa theo input = sơ đồ x ẩn (y=ax+b), dùng để tìm a và b sao cho kết quả sẽ gầm đúng nhất với ma trận input, 
 //có data set bao gồm x và kết quả y, sau đó tìm a và b, dựa vào a và b thì có model, lần sau chỉ cần x thì có thế tính ra y  
 - epoch: số lần máy đọc input, vd epoch = 300 thì máy đã đọc 300 lần, càng lớn thì output cần gần đáp án
 - classification: tạo model dùng để phân loại cho các input, 
@@ -33,6 +33,7 @@ REACT:
 // standard devation: khoảng cách giá trị (mean = 5 và standard devation = 10 -> (-5,15))
 - weight, bias: các giá trị sẽ đc máy điều chỉnh để phù hợp với data input
 
+- Dense Neural Network: Đây là mạng mà mọi nơ-ron lớp trước nối với mọi nơ-ron lớp sau, nơi mỗi thông tin đầu vào đều có ảnh hưởng nhất định đến mọi kết quả ở lớp kế tiếp qua các trọng số w
 - activation function:đứng ở đầu ra mỗi nơ rơn để kiểm tra kết quả sau khi máy tính ra có đạt yêu cầu hay k, nếu đạt sẽ đc truyền tiếp qua các layer tiếp theo
 - loss function: dựa vào kết quả máy tính ra để so sánh với output mẫu, nếu càng khác nhau thì loss càng lớn (loss lớn thì fail)
 - Backpropagation: dựa vào loss để kiểm tra w và b các layer trc đóng góp bnh r điều chỉnh
@@ -43,12 +44,12 @@ sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để 
 - Overfitting: khi cho máy input giống nhau quá nhiều lần, máy sẽ điều chỉnh w và b để phù hợp với input chứ k với test
 (bad)
 
-- Convolutional neural network: đọc qua toàn bộ ảnh, tìm kiếm features r từ features đó sẽ truyền qua cho neural network
+- Convolutional neural network: đọc qua toàn bộ ảnh, tìm kiếm features r từ features đó sẽ truyền qua cho neural network(dùng cho ảnh vào biểu đồ)
 - Convolution: vị trí của các giá trị trg input so với mẫu
 // giá cp 30 ngày, feature 1 = ngày 1->5, thấy giá đang tăng, set feature 1 = tăng, feature 2 = ngày 2->6, giá giảm -> giảm
 - Pooling: giảm kích thước dữ liệu, chia features thành nhóm r lấy MAX(cx có thể lấy MIN tùy vào cách lấy) nhưng vx giữ  lại đặc trưng, để tránh overfitting
 - Flattening:chuyển dữ liệu thành vector 1 chiều để nơ ron có thể đọc
-- Fully Connected Layer: quay về kiến trúc mạng (vd 4 → 16 → 8 → 3) 
+- Fully Connected Layer: là dense neural network
 // flow: input -> convolution layer -> activation function -> pooling layer -> flattening -> Fully Connected Layer - output
 // ( conv -> activation -> pooling) thường lặp lại nhiều lần trước khi đến flattening
 
@@ -59,15 +60,25 @@ sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để 
 - Temperature: độ sáng tạo (thấp = an toàn, cao = sáng tạo)
 - GRU CELL (Gated Recurrent Unit): đơn giản hơn của LSTM, gộp input và forget gate -> update gate, reset gate (Quyết định mức độ ảnh hưởng của quá khứ lên hiện tại.), giống LSTM ở nhiều bài nhưng nhanh hơn và ít bộ nhớ hơn
 
+- sentiment analysis: xác định cảm xúc của văn bản dựa vào từ, nhiều từ mang tính ý nghĩa tích cực thì positive, tiêu cực thì nagative, còn lại neatral
 - Bag of word: đánh dấu các từ trong 1 câu = 1 số, cho số đó vào list, 1 từ lặp lại n lần thì có n số đó trong list, thực tế thì thường chọn cụm 2-3 từ để rõ nghĩa (N-grams)
 - Word Embedding: chuyển từ thành dạng vector, nếu vector càng giống nhau thì từ càng đồng nghĩa
-
-- sentiment analysis: 
 - stop Words: những từ xuất hiện nhiều nhưng không mang ý nghĩa cảm xúc
 //Raw text → Clean → Tokenize → Remove stopwords
        → Vectorize (BoW/TF-IDF) → Model → Predict
 - TF (Term Frequency): từ xuất hiện nhiều trong 1 doc → quan trọng
 - IDF (Inverse Document Frequency): từ xuất hiện ở NHIỀU docs → ít quan trọng
+- Attention Mechanism: TF-IDF coi mọi từ quan trọng như nhau dựa trên số lượng, còn attention tập trung vào từ quan trọng để quyết định cảm xúc
+
+- Reinforcement learning: thay vì cho input, để máy tự tìm input trong môi trường xác định
+- Q learning: 1 phương pháp cua reinforcemenr learning, từ các hành động và trạng thái, tạo ra q table, từ đó tìm cách tối ưu hóa điểm
+- State: trạng thái hiện tại của máy
+// máy sẽ thao tác trọng môi trường, hành động có thể làm thay đổi state của máy, mối hành động sẽ được điểm thưởng hoặc phạt, máy có nhiệm vụ tối đa hóa điểm
+-- Q table:
+	action1 action2
+state1     1        2
+state2     2	    0
+state3     3        1
 ------------------------------------------------------
 Naive bayes:
 	P(A|B) = (P(B|A) / P(A)) / P(B)
