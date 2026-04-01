@@ -1,4 +1,4 @@
-REACT:
+   REACT:
 // useMemo -> ghi nhớ GIÁ TRỊ (ket qua cua phep tinh)
 // useCallback -> ghi nhớ HÀM (tham chieu cua function)
 // React.memo -> ghi nhớ COMPONENT (chi render lai khi props thay doi)
@@ -30,11 +30,11 @@ REACT:
 - hidden Markiv models: dựa vào những thứ quan sát đc để đoán thứ ẩn đi (A đi chơi -> chỗ A khả năng cao k mưa)
 // mean: thường thì sẽ vào giá trị này 
 // min/max: giá trị thấp nhất và cao nhất
-// standard devation: khoảng cách giá trị (mean = 5 và standard devation = 10 -> (-5,15))
+// standard deviation: khoảng cách giá trị (mean = 5 và standard deviation    = 10 -> (-5,15))
 - weight, bias: các giá trị sẽ đc máy điều chỉnh để phù hợp với data input
 
 - Dense Neural Network: Đây là mạng mà mọi nơ-ron lớp trước nối với mọi nơ-ron lớp sau, nơi mỗi thông tin đầu vào đều có ảnh hưởng nhất định đến mọi kết quả ở lớp kế tiếp qua các trọng số w
-- activation function:đứng ở đầu ra mỗi nơ rơn để kiểm tra kết quả sau khi máy tính ra có đạt yêu cầu hay k, nếu đạt sẽ đc truyền tiếp qua các layer tiếp theo
+- activation function: đứng ở đầu ra mỗi nơ rơn để kiểm tra kết quả sau khi máy tính ra có đạt yêu cầu hay k, nếu đạt sẽ đc truyền tiếp qua các layer tiếp theo
 - loss function: dựa vào kết quả máy tính ra để so sánh với output mẫu, nếu càng khác nhau thì loss càng lớn (loss lớn thì fail)
 - Backpropagation: dựa vào loss để kiểm tra w và b các layer trc đóng góp bnh r điều chỉnh
 - hidden layer: tầng để máy học (nhiều tầng -> phức tạp)
@@ -60,7 +60,7 @@ sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để 
 - Temperature: độ sáng tạo (thấp = an toàn, cao = sáng tạo)
 - GRU CELL (Gated Recurrent Unit): đơn giản hơn của LSTM, gộp input và forget gate -> update gate, reset gate (Quyết định mức độ ảnh hưởng của quá khứ lên hiện tại.), giống LSTM ở nhiều bài nhưng nhanh hơn và ít bộ nhớ hơn
 
-- sentiment analysis: xác định cảm xúc của văn bản dựa vào từ, nhiều từ mang tính ý nghĩa tích cực thì positive, tiêu cực thì nagative, còn lại neatral
+- sentiment analysis: xác định cảm xúc của văn bản dựa vào từ, nhiều từ mang tính ý nghĩa tích cực thì positive, tiêu cực thì negative, còn lại neutral
 - Bag of word: đánh dấu các từ trong 1 câu = 1 số, cho số đó vào list, 1 từ lặp lại n lần thì có n số đó trong list, thực tế thì thường chọn cụm 2-3 từ để rõ nghĩa (N-grams)
 - Word Embedding: chuyển từ thành dạng vector, nếu vector càng giống nhau thì từ càng đồng nghĩa
 - stop Words: những từ xuất hiện nhiều nhưng không mang ý nghĩa cảm xúc
@@ -71,7 +71,7 @@ sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để 
 - Attention Mechanism: TF-IDF coi mọi từ quan trọng như nhau dựa trên số lượng, còn attention tập trung vào từ quan trọng để quyết định cảm xúc
 
 - Reinforcement learning: thay vì cho input, để máy tự tìm input trong môi trường xác định
-- Q learning: 1 phương pháp cua reinforcemenr learning, từ các hành động và trạng thái, tạo ra q table, từ đó tìm cách tối ưu hóa điểm
+- Q learning: 1 phương pháp cua reinforcement learning, từ các hành động và trạng thái, tạo ra q table, từ đó tìm cách tối ưu hóa điểm
 - State: trạng thái hiện tại của máy
 // máy sẽ thao tác trọng môi trường, hành động có thể làm thay đổi state của máy, mối hành động sẽ được điểm thưởng hoặc phạt, máy có nhiệm vụ tối đa hóa điểm
 -- Q table:
@@ -79,6 +79,11 @@ sau đó phình to ra (đưa vào chiều cao hơn - 16 - hidden layer 1) để 
 state1     1        2
 state2     2	    0
 state3     3        1
+
+- RAG: Lấy dữ liệu -> chunking (cắt thành nhiều phần) -> embed (chuyển thành vector) -> lưu vào vectorDB -> có câu hỏi -> chuyển câu hỏi thành vector -> tìm kiếm trong vector db -> re ranking để lấy phần liên quan nhất -> cho qua main LLM để gen ra câu trả lời
+- Guardrails: kiểm tra input và output có đúng với chính sách hoặc và yêu cầu cho trước
+// flow hoàn chỉnh:
+User Input → Guardrails → Query Rewriting → Hybrid Search → Reranking → Memory + Tool Use → LLM Gen → Guardrails → Evaluation/Observability → Output.
 ------------------------------------------------------
 Naive bayes:
 	P(A|B) = (P(B|A) / P(A)) / P(B)

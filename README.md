@@ -16,6 +16,8 @@ Tập hợp các ví dụ minh họa về Machine Learning và AI, xây dựng t
 | `sentiment_analysis_example.py` | Sentiment Analysis | Phân tích cảm xúc review (Rule-Based, Naive Bayes, TF-IDF + NN) |
 | `model_save_load_improve.py` | Model Save/Load | Lưu, tải và cải tiến model (Dropout, L2, Early Stopping) |
 | `q_learning_example.py` | Q-Learning | Học tăng cường: mê cung, taxi, frozen lake, exploration vs exploitation |
+| `rag_vector_search_example.py` | RAG + Vector Search | Minh họa embedding, vector store, truy xuất ngữ nghĩa và sinh câu trả lời đơn giản |
+| `observability_langfuse_example_commented.py` | Observability (Langfuse) | Theo dõi pipeline RAG với trace/span/generation trên Langfuse |
 | `tensor.py` | Tensor | Các phép toán tensor cơ bản |
 | `services.py` | Services | Các class tiện ích dùng chung (Activation, Loss, Data) |
 
@@ -24,6 +26,8 @@ Tập hợp các ví dụ minh họa về Machine Learning và AI, xây dựng t
 - Python 3.8+
 - NumPy
 - TensorFlow (cho `dataset_example.py`, `classification_example.py`, `clustering_example.py`, `tensor.py`)
+- Langfuse (cho `observability_langfuse_example_commented.py`)
+- python-dotenv (khuyến nghị cho `observability_langfuse_example_commented.py`, có fallback parser nếu chưa cài)
 
 ## Cài đặt
 
@@ -44,4 +48,13 @@ python rnn_example.py
 python sentiment_analysis_example.py
 python model_save_load_improve.py
 python q_learning_example.py
+python rag_vector_search_example.py
+python observability_langfuse_example_commented.py
 ```
+
+## Ghi chú cho ví dụ Observability
+
+- Tạo file `.env` với các biến:
+	- `LANGFUSE_PUBLIC_KEY`
+	- `LANGFUSE_SECRET_KEY`
+	- (tuỳ chọn) `LANGFUSE_HOST` hoặc `LANGFUSE_BASE_URL`
